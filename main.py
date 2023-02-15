@@ -16,13 +16,23 @@ app_secret = os.environ["APP_SECRET"]
 
 user_id = os.environ["USER_ID"]
 template_id = os.environ["TEMPLATE_ID"]
+key = os.environ["MY_KEY"]
 
+
+# def get_weather():
+#   url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+#   res = requests.get(url).json()
+#   weather = res['data']['list'][0]
+#   return weather['weather'], math.floor(weather['temp'])
 
 def get_weather():
-  url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+  url = "https://api.seniverse.com/v3/weather/now.json?key=" + key + "&location=" + city + "&language=zh-Hans&unit=c"
   res = requests.get(url).json()
-  weather = res['data']['list'][0]
-  return weather['weather'], math.floor(weather['temp'])
+  weather = res['results'][0]
+  str11 = str(weather['now'])
+  json_str = str11.replace("'", '"')
+  json_dict = json.loads(json_str)
+  return json_dict['text'],json_dict['temperature']
 
 def get_count():
   delta = today - datetime.strptime(start_date, "%Y-%m-%d")
